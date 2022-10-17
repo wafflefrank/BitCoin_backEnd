@@ -1,4 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
+import { ElMessage } from 'element-plus';
+import axios from 'axios';
 // import Home from '../views/Home.vue';
 
 const routes = [
@@ -7,6 +9,9 @@ const routes = [
     name: 'ROCKET管理後台',
     component: () => import('@/views/AppMain.vue'),
     redirect: { name: '首頁' },
+    meta: {
+      requireAuth: true, // 判斷是否需要驗證會員登入
+    },
     children: [
       {
         path: 'home',
@@ -169,5 +174,25 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
 });
-
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((m) => m.meta.requireAuth)) {
+    axios.post('/backend/loginCheck').then((res) => {
+      console.log('抓到後台登入狀態了', res.data);
+      // 對路由進行驗證
+      if (res.data.code === 200) {
+        console.log('後臺成功登入', res.data);
+        // 已經登陸
+        next(); // 正常跳轉到你設定好的頁面
+      } else {
+        // 未登入則跳轉到登陸介面
+        ElMessage({ showClose: true, message: '請先登入!', type: 'warning' });
+        next({ path: '/login' });
+      }
+    });
+    // console.log(document.cookie);
+    // console.log(localStorage.getItem('user'));
+  } else {
+    next();
+  }
+});
 export default router;

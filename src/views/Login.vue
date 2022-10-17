@@ -66,6 +66,7 @@ export default {
       this.$http.post('/backend/login', this.addForm_Data).then((res) => {
         if (res.data.code === 200) {
           this.$swal.fire('登入成功!', '登入成功', 'success');
+          localStorage.setItem('user', this.addForm_Data);
           this.$router.push('/');
         } else {
           this.$swal.fire('登入失敗!', `${res.data.data}`, 'error');
