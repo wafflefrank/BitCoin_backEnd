@@ -98,10 +98,10 @@
   <el-dialog v-model="modalShow" title="確認" width="60%" center>
     <div class="text-center justify-content-between pb-2">{{modalMessage}}</div>
     <template v-if="modalType === 'reject'">
-      <el-form>
-        <el-form-item label="駁回理由">
+      <el-form :rules="rules" ref="addReason_Form" :model="reasonForm_Data">
+        <el-form-item label="駁回理由" prop="modalRejectMessage">
           <el-input
-            v-model="modalRejectMessage"
+            v-model="reasonForm_Data.modalRejectMessage"
             placeholder="請輸入理由"
           />
         </el-form-item>
@@ -134,7 +134,9 @@ export default {
       modalType: 'verify',
       modalId: 0,
       modalMessage: '確認是否駁回',
-      modalRejectMessage: '',
+      reasonForm_Data: {
+        modalRejectMessage: '',
+      },
       small: true, // 分頁樣式大小
       total: 0, // 總共多少頁數
       currentPage: 1, // 當前頁數
@@ -160,6 +162,17 @@ export default {
           value: 'month',
         },
       ],
+      // 充值表單規則
+      rules: {
+        // 轉帳網路
+        modalRejectMessage: [
+          {
+            required: true,
+            message: '請填入理由',
+            trigger: 'blur',
+          },
+        ],
+      },
     };
   },
   components: {},
@@ -240,7 +253,7 @@ export default {
     },
     verifyRecharge(data, type) {
       this.modalType = type;
-      this.modalRejectMessage = '';
+      this.reasonForm_Data.modalRejectMessage = '';
       this.modalId = data.id;
 
       if (type === 'verify') {
@@ -252,35 +265,45 @@ export default {
       this.modalShow = true;
     },
     updateRecharge() {
-      this.modalShow = false;
       const formData = {
         id: this.modalId,
         status: (this.modalType === 'verify') ? 1 : 9,
-        msg: (this.modalType === 'verify') ? '' : this.modalRejectMessage,
+        msg: (this.modalType === 'verify') ? '' : this.reasonForm_Data.modalRejectMessage,
       };
-
-      this.$http
-        .post(
-          '/backend/order/withdrawUpdate', formData,
-        )
-        .then((res) => {
-          if (res.data.code === 200) {
-            this.getRechargeList();
-            this.$message({
-              type: 'success',
-              message: '執行成功',
+      this.$refs.addReason_Form.validate((valid) => {
+        // 表單驗證通過為true(才能送出)，有一個不通過就是false
+        if (valid) {
+          this.isValid = valid;
+          console.log(valid);
+          this.$http
+            .post(
+              '/backend/order/withdrawUpdate', formData,
+            )
+            .then((res) => {
+              if (res.data.code === 200) {
+                this.getRechargeList();
+                this.$message({
+                  type: 'success',
+                  message: '執行成功',
+                });
+                this.modalShow = false;
+              }
+            })
+            .catch(() => {
+              this.$message({
+                type: 'error',
+                message: '執行失敗',
+              });
             });
-          }
-        })
-        .catch(() => {
-          this.$message({
-            type: 'error',
-            message: '執行失敗',
-          });
-        });
+        }
+        // 沒通過表單驗證
+        console.log('驗證失敗');
+        this.isValid = valid;
+        return false;
+      });
     },
     setRejectMessage(message) {
-      this.modalRejectMessage = message;
+      this.reasonForm_Data.modalRejectMessage = message;
     },
   },
   created() {

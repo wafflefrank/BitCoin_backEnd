@@ -48,8 +48,14 @@ export default {
   },
   methods: {
     logout() {
-      this.$router.push('/login');
-      ElMessage({ showClose: true, message: '已登出!', type: 'success' });
+      this.$http.get('/backend/logout').then((res) => {
+        if (res.data.code === 200) {
+          this.$router.push('/login');
+          ElMessage({ showClose: true, message: '已登出!', type: 'success' });
+        } else {
+          this.$swal.fire('登出失敗!', `${res.data.msg}`, 'error');
+        }
+      });
     },
     isHome(route) {
       return route.name === 'home';
