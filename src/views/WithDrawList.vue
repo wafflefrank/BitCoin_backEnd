@@ -270,37 +270,60 @@ export default {
         status: (this.modalType === 'verify') ? 1 : 9,
         msg: (this.modalType === 'verify') ? '' : this.reasonForm_Data.modalRejectMessage,
       };
-      this.$refs.addReason_Form.validate((valid) => {
-        // 表單驗證通過為true(才能送出)，有一個不通過就是false
-        if (valid) {
-          this.isValid = valid;
-          console.log(valid);
-          this.$http
-            .post(
-              '/backend/order/withdrawUpdate', formData,
-            )
-            .then((res) => {
-              if (res.data.code === 200) {
-                this.getRechargeList();
-                this.$message({
-                  type: 'success',
-                  message: '執行成功',
-                });
-                this.modalShow = false;
-              }
-            })
-            .catch(() => {
+      if (this.modalType === 'verify') {
+        this.$http
+          .post(
+            '/backend/order/withdrawUpdate', formData,
+          )
+          .then((res) => {
+            if (res.data.code === 200) {
+              this.getRechargeList();
               this.$message({
-                type: 'error',
-                message: '執行失敗',
+                type: 'success',
+                message: '執行成功',
               });
+              this.modalShow = false;
+            }
+          })
+          .catch(() => {
+            this.$message({
+              type: 'error',
+              message: '執行失敗',
             });
-        }
-        // 沒通過表單驗證
-        console.log('驗證失敗');
-        this.isValid = valid;
-        return false;
-      });
+          });
+      } else {
+        this.$refs.addReason_Form.validate((valid) => {
+        // 表單驗證通過為true(才能送出)，有一個不通過就是false
+          if (valid) {
+            this.isValid = valid;
+            console.log(valid);
+            this.$http
+              .post(
+                '/backend/order/withdrawUpdate', formData,
+              )
+              .then((res) => {
+                if (res.data.code === 200) {
+                  this.getRechargeList();
+                  this.$message({
+                    type: 'success',
+                    message: '執行成功',
+                  });
+                  this.modalShow = false;
+                }
+              })
+              .catch(() => {
+                this.$message({
+                  type: 'error',
+                  message: '執行失敗',
+                });
+              });
+          }
+          // 沒通過表單驗證
+          console.log('驗證失敗');
+          this.isValid = valid;
+          return false;
+        });
+      }
     },
     setRejectMessage(message) {
       this.reasonForm_Data.modalRejectMessage = message;
