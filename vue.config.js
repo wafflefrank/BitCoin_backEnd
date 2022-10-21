@@ -8,5 +8,15 @@ module.exports = {
   devServer: {
     proxy: 'http://167.179.74.47:4000',
   },
+  // 網頁icon
+  pwa: {
+    iconPaths: {
+      favicon32: 'rocket.png',
+      favicon16: 'rocket.png',
+      appleTouchIcon: 'rocket.png',
+      maskIcon: 'rocket.png',
+      msTileImage: 'rocket.png',
+    },
+  },
 
 };

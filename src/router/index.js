@@ -175,6 +175,7 @@ const router = createRouter({
   routes,
 });
 router.beforeEach((to, from, next) => {
+  document.title = 'Rocket管理後台';
   if (to.matched.some((m) => m.meta.requireAuth)) {
     axios.post('/backend/loginCheck').then((res) => {
       console.log('抓到後台登入狀態了', res.data);
