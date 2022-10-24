@@ -184,7 +184,7 @@ export default {
       this.isLoading = true;
       this.$http
         .get(
-          `${this.rootApi}/backend/pledge/pledgeSetList?currency=${this.searchInfo.currency}`,
+          `/backend/pledge/pledgeSetList?currency=${this.searchInfo.currency}`,
         )
         .then((res) => {
           this.isLoading = false;
@@ -220,7 +220,7 @@ export default {
       if (this.modalType === 'create') {
         this.$http
           .post(
-            `${this.rootApi}/backend/pledge/pledgeSetAdd`, this.updateInfo,
+            '/backend/pledge/pledgeSetAdd', this.updateInfo,
           )
           .then((res) => {
             this.isLoading = false;
@@ -237,7 +237,7 @@ export default {
 
         this.$http
           .post(
-            `${this.rootApi}/backend/pledge/pledgeSetUpdate`, formData,
+            '/backend/pledge/pledgeSetUpdate', formData,
           )
           .then((res) => {
             this.isLoading = false;

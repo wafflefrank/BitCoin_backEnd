@@ -15,8 +15,8 @@
     :header-cell-class-name="'member_title_dark'"
   >
     <el-table-column label="消息資訊">
-      <el-table-column prop="title" sortable label="標題"/>
-      <el-table-column prop="content" sortable label="內容"/>
+      <el-table-column prop="title.cht" sortable label="標題"/>
+      <el-table-column prop="content.cht" sortable label="內容"/>
       <el-table-column prop="createTime" sortable label="創建時間" :formatter="timeFormat"/>
       <el-table-column prop="updateTime" sortable label="修改時間" :formatter="timeFormat"/>
     </el-table-column>
@@ -45,7 +45,7 @@
     ></el-pagination>
   </div>
 
-  <!-- 修改彈窗 -->
+  <!-- 新增彈窗 -->
   <el-dialog v-model="modalShow" :title="modalTitle" width="60%" center>
       <el-form>
         <el-form-item label="標題">
@@ -54,10 +54,22 @@
             placeholder="請輸入標題"
           />
         </el-form-item>
+        <el-form-item label="標題(英文)">
+          <el-input
+            v-model="modalInfo.title_en"
+            placeholder="請輸入標題(英文)"
+          />
+        </el-form-item>
         <el-form-item label="內容">
           <el-input
             v-model="modalInfo.content"
             placeholder="請輸入內容"
+          />
+        </el-form-item>
+        <el-form-item label="內容(英文)">
+          <el-input
+            v-model="modalInfo.content_en"
+            placeholder="請輸入內容(英文)"
           />
         </el-form-item>
       </el-form>
@@ -77,7 +89,6 @@ export default {
   name: 'News',
   data() {
     return {
-      rootApi: process.env.VUE_APP_TESTAPI,
       modalShow: false,
       modalType: 'create',
       modalTitle: '新增消息',
@@ -90,7 +101,9 @@ export default {
       tableData: [],
       modalInfo: {
         title: '',
+        title_en: '',
         content: '',
+        content_en: '',
       },
     };
   },
@@ -100,13 +113,14 @@ export default {
       this.isLoading = true;
       this.$http
         .get(
-          `${this.rootApi}/backend/page/newsList?skip=${skip}&limit=${limit}`,
+          `/backend/page/newsList?skip=${skip}&limit=${limit}`,
         )
         .then((res) => {
           this.isLoading = false;
           if (res.data.code === 200) {
             this.tableData = res.data.data.list;
             this.total = res.data.data.total;
+            console.log(this.tableData);
           }
         });
     },
@@ -171,7 +185,7 @@ export default {
       if (this.modalType === 'create') {
         this.$http
           .post(
-            `${this.rootApi}/backend/page/newsAdd`, this.modalInfo,
+            '/backend/page/newsAdd', this.modalInfo,
           )
           .then((res) => {
             this.modalShow = false;
@@ -188,7 +202,7 @@ export default {
 
         this.$http
           .post(
-            `${this.rootApi}/backend/page/newsUpdate`, formatData,
+            '/backend/page/newsUpdate', formatData,
           )
           .then((res) => {
             this.modalShow = false;
@@ -211,7 +225,7 @@ export default {
         this.isLoading = true;
         this.$http
           .post(
-            `${this.rootApi}/backend/page/newsDel`, formatData,
+            '/backend/page/newsDel', formatData,
           )
           .then((res) => {
             this.isLoading = false;

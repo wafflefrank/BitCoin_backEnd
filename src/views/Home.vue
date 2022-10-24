@@ -34,7 +34,7 @@ export default {
       this.isLoading = true;
       this.$http
         .get(
-          `${this.rootApi}/backend/page/pageValue`,
+          '/backend/page/pageValue',
         )
         .then((res) => {
           this.isLoading = false;
