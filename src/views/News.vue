@@ -170,13 +170,16 @@ export default {
       };
     },
     editNews(data) {
+      console.log(data);
       this.modalShow = true;
       this.modalType = 'edit';
       this.modalId = data.id;
       this.modalTitle = '編輯消息';
       this.modalInfo = {
-        title: data.title,
-        content: data.content,
+        title: data.title.cht,
+        title_en: data.title.en,
+        content: data.content.cht,
+        content_en: data.content.en,
       };
     },
     updateNews() {
