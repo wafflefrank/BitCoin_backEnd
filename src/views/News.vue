@@ -60,6 +60,12 @@
             placeholder="請輸入標題(英文)"
           />
         </el-form-item>
+        <el-form-item label="標題(越南文)">
+          <el-input
+            v-model="modalInfo.title_vn"
+            placeholder="請輸入標題(越南文)"
+          />
+        </el-form-item>
         <el-form-item label="內容">
           <el-input
             v-model="modalInfo.content"
@@ -70,6 +76,12 @@
           <el-input
             v-model="modalInfo.content_en"
             placeholder="請輸入內容(英文)"
+          />
+        </el-form-item>
+        <el-form-item label="內容(越南文)">
+          <el-input
+            v-model="modalInfo.content_vn"
+            placeholder="請輸入內容(越南文)"
           />
         </el-form-item>
       </el-form>
@@ -102,8 +114,10 @@ export default {
       modalInfo: {
         title: '',
         title_en: '',
+        title_vn: '',
         content: '',
         content_en: '',
+        content_vn: '',
       },
     };
   },
@@ -178,8 +192,10 @@ export default {
       this.modalInfo = {
         title: data.title.cht,
         title_en: data.title.en,
+        title_vn: data.title.vn,
         content: data.content.cht,
         content_en: data.content.en,
+        content_vn: data.content.vn,
       };
     },
     updateNews() {
