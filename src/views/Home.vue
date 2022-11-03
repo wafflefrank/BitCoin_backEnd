@@ -40,12 +40,12 @@ export default {
           this.isLoading = false;
           if (res.data.code === 200) {
             this.shortcutsInfo = res.data.data;
-            this.liveChartInfo = [
-              { value: 1, name: 'ETH' },
-              { value: 2, name: 'BTC' },
-              { value: 3, name: 'USDT' },
-            ];
-            // this.liveChartInfo = res.data.data.walletData.currency;
+            // this.liveChartInfo = [
+            //   { value: 1, name: 'ETH' },
+            //   { value: 2, name: 'BTC' },
+            //   { value: 30, name: 'USDT' },
+            // ];
+            this.liveChartInfo = res.data.data.walletData.currency;
           }
         });
     },

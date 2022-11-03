@@ -18,7 +18,7 @@ export default {
       // 绘制图表
       myChart.setOption({
         title: {
-          text: '錢包圓餅圖',
+          text: '質押池子',
         },
         tooltip: {},
         // xAxis: {
