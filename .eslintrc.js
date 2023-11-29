@@ -15,5 +15,6 @@ module.exports = {
     'vue/no-deprecated-slot-attribute': 'off',
     'vue/no-unused-vars': 'error',
     'max-len': ['error', { code: 300 }],
+    'linebreak-style': ['error', 'windows'],
   },
 };
